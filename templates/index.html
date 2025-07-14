@@ -7,65 +7,61 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
   <style>
     body {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background-color: #f8f9fa;
       min-height: 100vh;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Arial', sans-serif;
     }
     .container {
-      background: rgba(255, 255, 255, 0.95);
-      border-radius: 15px;
+      background-color: #ffffff;
+      border-radius: 8px;
       padding: 30px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin-top: 50px;
     }
     h1 {
       color: #2c3e50;
-      font-weight: 700;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+      font-weight: 600;
+      text-align: center;
       margin-bottom: 30px;
     }
     .form-control {
-      border-radius: 10px;
-      border: 2px solid #e9ecef;
-      transition: all 0.3s ease;
+      border-radius: 4px;
+      border: 1px solid #ced4da;
     }
     .form-control:focus {
-      border-color: #667eea;
-      box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+      border-color: #007bff;
+      box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
     }
     .btn-primary {
-      background: linear-gradient(45deg, #667eea, #764ba2);
+      background-color: #007bff;
       border: none;
-      border-radius: 10px;
-      padding: 12px 30px;
-      font-weight: 600;
-      transition: all 0.3s ease;
-      transform: translateY(0);
+      border-radius: 4px;
+      padding: 10px 20px;
+      font-weight: 500;
     }
     .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+      background-color: #0056b3;
     }
     .alert {
-      border-radius: 10px;
+      border-radius: 4px;
       border: none;
     }
     .alert-success {
-      background: linear-gradient(45deg, #56ab2f, #a8e6cf);
+      background-color: #d4edda;
       color: #155724;
     }
     .alert-danger {
-      background: linear-gradient(45deg, #ff416c, #ff4b2b);
+      background-color: #f8d7da;
       color: #721c24;
     }
     .form-group label {
-      font-weight: 600;
-      color: #2c3e50;
+      font-weight: 500;
+      color: #495057;
     }
     .probability-info {
-      background: rgba(102, 126, 234, 0.1);
-      border-radius: 10px;
-      padding: 15px;
+      background-color: #e9ecef;
+      border-radius: 4px;
+      padding: 10px;
       margin-top: 10px;
     }
     .help-text {
@@ -76,90 +72,54 @@
   </style>
 </head>
 <body>
-  <div class="container mt-5">
-    <h1 class="text-center">🚢 Predicción de Supervivencia - Titanic</h1>
-    <p class="text-center text-muted mb-4">Ingresa los datos del pasajero para predecir si habría sobrevivido</p>
-
+  <div class="container">
+    <h1>Predicción de Supervivencia en el Titanic</h1>
+   
     <form id="predictionForm" class="mt-4">
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
-            <label for="name">👤 Nombre:</label>
-            <input type="text" class="form-control" id="name" name="name" placeholder="Nombre del pasajero" required />
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="form-group">
-            <label for="pclass">🎫 Clase del Pasajero:</label>
+            <label for="pclass">Clase del Pasajero:</label>
             <select class="form-control" id="pclass" name="pclass" required>
-              <option value="">Seleccionar clase</option>
+              <option value="">Seleccione una clase</option>
               <option value="1">Primera clase</option>
               <option value="2">Segunda clase</option>
               <option value="3">Tercera clase</option>
             </select>
           </div>
         </div>
-      </div>
-
-      <div class="row">
         <div class="col-md-6">
           <div class="form-group">
-            <label for="sex">👥 Sexo:</label>
+            <label for="sex">Sexo:</label>
             <select class="form-control" id="sex" name="sex" required>
-              <option value="">Seleccionar sexo</option>
+              <option value="">Seleccione sexo</option>
               <option value="male">Hombre</option>
               <option value="female">Mujer</option>
             </select>
           </div>
         </div>
-        <div class="col-md-6">
-          <div class="form-group">
-            <label for="age">🎂 Edad:</label>
-            <input type="number" class="form-control" id="age" name="age" step="0.1" min="0" max="120" placeholder="Edad" required />
-          </div>
-        </div>
       </div>
 
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
-            <label for="sibsp">👨‍👩‍👧‍👦 Hermanos / Cónyuges a bordo:</label>
-            <input type="number" class="form-control" id="sibsp" name="sibsp" value="0" min="0" max="10" />
+            <label for="age">Edad:</label>
+            <input type="number" class="form-control" id="age" name="age" step="0.1" min="0" max="120" placeholder="Ingrese la edad" required />
           </div>
         </div>
         <div class="col-md-6">
           <div class="form-group">
-            <label for="parch">👶 Padres / Hijos a bordo:</label>
-            <input type="number" class="form-control" id="parch" name="parch" value="0" min="0" max="10" />
-          </div>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-md-6">
-          <div class="form-group">
-            <label for="fare">💰 Tarifa pagada:</label>
-            <input type="number" class="form-control" id="fare" name="fare" step="0.01" min="0" placeholder="Monto pagado" required />
+            <label for="fare">Tarifa Pagada:</label>
+            <input type="number" class="form-control" id="fare" name="fare" step="0.01" min="0" placeholder="Ingrese el monto" required />
             <div class="help-text">Ejemplo: 1ra clase (30-500), 2da (10-30), 3ra (3-15)</div>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="form-group">
-            <label for="embarked">🚢 Puerto de embarque:</label>
-            <select class="form-control" id="embarked" name="embarked" required>
-              <option value="">Seleccionar puerto</option>
-              <option value="S">Southampton</option>
-              <option value="C">Cherbourg</option>
-              <option value="Q">Queenstown</option>
-            </select>
           </div>
         </div>
       </div>
 
       <div class="form-group">
-        <label for="cabin">🏠 Cubierta de camarote:</label>
+        <label for="cabin">Cubierta del Camarote:</label>
         <select class="form-control" id="cabin" name="cabin" required>
-          <option value="">Seleccionar cubierta</option>
+          <option value="">Seleccione cubierta</option>
           <option value="A">Cubierta A (superior)</option>
           <option value="B">Cubierta B</option>
           <option value="C">Cubierta C</option>
@@ -170,12 +130,12 @@
           <option value="T">Cubierta T</option>
           <option value="U" selected>Desconocida</option>
         </select>
-        <div class="help-text">Cubiertas superiores (A, B, C) tenían mejores tasas de supervivencia</div>
+        <div class="help-text">Las cubiertas superiores (A, B, C) tenían mejores tasas de supervivencia</div>
       </div>
 
       <div class="text-center">
-        <button type="submit" class="btn btn-primary btn-lg">
-          🔮 Predecir Supervivencia
+        <button type="submit" class="btn btn-primary">
+          Realizar Predicción
         </button>
       </div>
     </form>
@@ -188,7 +148,7 @@
     $(document).ready(function () {
       $('#predictionForm').submit(function (e) {
         e.preventDefault();
-        $('#result').html('<div class="alert alert-info">🔄 Analizando datos del pasajero...</div>');
+        $('#result').html('<div class="alert alert-info">Procesando datos...</div>');
 
         $.ajax({
           url: '/predict',
@@ -196,23 +156,23 @@
           data: $(this).serialize(),
           success: function (response) {
             if (response.error) {
-              $('#result').html('<div class="alert alert-danger">❌ ' + response.error + '</div>');
+              $('#result').html('<div class="alert alert-danger">' + response.error + '</div>');
             } else {
               const survivalRate = (response.probability.survived * 100).toFixed(1);
               const notSurvivalRate = (response.probability.not_survived * 100).toFixed(1);
               const msg = response.survived
                 ? `<div class="alert alert-success">
-                    ✅ <strong>${response.passenger_name}</strong> probablemente habría sobrevivido.
+                    Probablemente habría sobrevivido.
                     <div class="probability-info">
                       <strong>Probabilidad de supervivencia: ${survivalRate}%</strong><br>
-                      <small>No haber sobrevivido: ${notSurvivalRate}%</small>
+                      <small>Probabilidad de no supervivencia: ${notSurvivalRate}%</small>
                     </div>
                   </div>`
                 : `<div class="alert alert-danger">
-                    ❌ <strong>${response.passenger_name}</strong> probablemente no habría sobrevivido.
+                    Probablemente no habría sobrevivido.
                     <div class="probability-info">
                       <strong>Probabilidad de supervivencia: ${survivalRate}%</strong><br>
-                      <small>No haber sobrevivido: ${notSurvivalRate}%</small>
+                      <small>Probabilidad de no supervivencia: ${notSurvivalRate}%</small>
                     </div>
                   </div>`;
               $('#result').html(msg);
@@ -224,7 +184,7 @@
               errMsg = xhr.responseJSON.error;
             }
             $('#result').html(
-              `<div class="alert alert-danger">❌ Error: ${errMsg}</div>`
+              `<div class="alert alert-danger">Error: ${errMsg}</div>`
             );
           },
         });
@@ -233,4 +193,3 @@
   </script>
 </body>
 </html>
-

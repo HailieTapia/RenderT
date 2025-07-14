@@ -50,12 +50,8 @@ def predict():
             'Pclass': int(request.form.get('pclass')),
             'Sex': request.form.get('sex'),
             'Age': float(request.form.get('age')),
-            'SibSp': int(request.form.get('sibsp')),
-            'Parch': int(request.form.get('parch')),
             'Fare': float(request.form.get('fare')),
-            'Embarked': request.form.get('embarked'),
-            'Cabin': request.form.get('cabin', 'U')[0].upper() if request.form.get('cabin') else 'U',
-            'Name': request.form.get('name', 'Unknown')
+            'Cabin': request.form.get('cabin', 'U')[0].upper() if request.form.get('cabin') else 'U'
         }
         
         logger.info(f"=== DATOS RECIBIDOS ===")
@@ -68,15 +64,12 @@ def predict():
         if data['Fare'] < 0:
             return jsonify({'error': 'Fare must be positive'}), 400
         
-        # Crear DataFrame inicial siguiendo el orden del código de Jupyter
+        # Crear DataFrame inicial
         df = pd.DataFrame([{
             'Pclass': data['Pclass'],
             'Sex': data['Sex'],
             'Age': data['Age'],
-            'SibSp': data['SibSp'],
-            'Parch': data['Parch'],
             'Fare': data['Fare'],
-            'Embarked': data['Embarked'],
             'Cabin': data['Cabin']
         }])
         
@@ -84,11 +77,9 @@ def predict():
         logger.info(f"Columnas: {df.columns.tolist()}")
         logger.info(f"Valores: {df.iloc[0].to_dict()}")
         
-        # Paso 1: Codificar Sex (OneHotEncoder) - Código #6
+        # Paso 1: Codificar Sex (OneHotEncoder)
         encoded_sex = encoder_sex.transform(df[['Sex']])
         encoded_cols = encoder_sex.get_feature_names_out(['Sex'])
-        
-        # Remover columna Sex y agregar las codificadas
         df = df.drop(columns=['Sex'])
         df[encoded_cols] = encoded_sex
         
@@ -96,13 +87,7 @@ def predict():
         logger.info(f"Columnas: {df.columns.tolist()}")
         logger.info(f"Valores: {df.iloc[0].to_dict()}")
         
-        # Paso 2: Codificar Embarked (OrdinalEncoder) - Código #7
-        df[['Embarked']] = encoder_embarked.transform(df[['Embarked']])
-        
-        logger.info(f"=== DESPUÉS DE CODIFICAR EMBARKED ===")
-        logger.info(f"Embarked: {df['Embarked'].iloc[0]}")
-        
-        # Paso 3: Codificar Cabin (OrdinalEncoder) - Código #9
+        # Paso 3: Codificar Cabin (OrdinalEncoder)
         df[['Cabin']] = encoder_deck.transform(df[['Cabin']])
         
         logger.info(f"=== DESPUÉS DE CODIFICAR CABIN ===")
@@ -110,35 +95,27 @@ def predict():
         logger.info(f"Todas las columnas: {df.columns.tolist()}")
         logger.info(f"Valores finales: {df.iloc[0].to_dict()}")
         
-        # Paso 4: Seleccionar características según código #24
-        # Verificar que tenemos todas las características necesarias
-        missing_features = [f for f in selected_features if f not in df.columns]
-        if missing_features:
-            logger.error(f"Faltan características: {missing_features}")
-            logger.error(f"Columnas disponibles: {df.columns.tolist()}")
-            return jsonify({'error': f'Missing features: {missing_features}'}), 500
-        
-        # Seleccionar solo las características necesarias
+        # Paso 4: Seleccionar características
         X = df[selected_features]
         
         logger.info(f"=== CARACTERÍSTICAS SELECCIONADAS ===")
         logger.info(f"Features: {selected_features}")
         logger.info(f"DataFrame X: {X.iloc[0].to_dict()}")
         
-        # Paso 5: Aplicar StandardScaler - Código #19
+        # Paso 5: Aplicar StandardScaler
         X_scaled = scaler.transform(X)
         
         logger.info(f"=== DESPUÉS DE SCALER ===")
         logger.info(f"Datos escalados: {X_scaled[0]}")
         
-        # Paso 6: Aplicar PCA - Código #27
+        # Paso 6: Aplicar PCA
         X_pca = pca_model.transform(X_scaled)
         
         logger.info(f"=== DESPUÉS DE PCA ===")
         logger.info(f"Datos PCA: {X_pca[0]}")
         logger.info(f"Componentes PCA: {X_pca.shape[1]}")
         
-        # Paso 7: Hacer predicción con KNN - Código #28-29
+        # Paso 7: Hacer predicción con KNN
         prediction = knn_model.predict(X_pca)[0]
         probability = knn_model.predict_proba(X_pca)[0]
         
@@ -146,9 +123,9 @@ def predict():
         logger.info(f"Predicción: {prediction}")
         logger.info(f"Probabilidades: {probability}")
         
+        # Respuesta sin nombre si no lo necesitamos
         return jsonify({
             'survived': bool(prediction),
-            'passenger_name': data['Name'],
             'probability': {
                 'not_survived': float(probability[0]),
                 'survived': float(probability[1])
